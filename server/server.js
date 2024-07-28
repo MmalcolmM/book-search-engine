@@ -14,7 +14,7 @@ const app = express();
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: ({ req }) => authMiddleware({ req }),
+  context: ({ req }) => authMiddleware({ req }), // Ensure context is set
 });
 
 const startApolloServer = async () => {
@@ -23,9 +23,8 @@ const startApolloServer = async () => {
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
 
-  app.use('/graphql', expressMiddleware(server)); // Ensure this path is correct
+  app.use('/graphql', expressMiddleware(server));
 
-  // if we're in production, serve client/dist as static assets
   if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, '../client/dist')));
 

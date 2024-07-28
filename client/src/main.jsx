@@ -2,20 +2,19 @@ import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { ApolloProvider, ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
+import { onError } from '@apollo/client/link/error';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import App from './App.jsx';
 import SearchBooks from './pages/SearchBooks.jsx';
 import SavedBooks from './pages/SavedBooks.jsx';
 import LoginForm from './components/LoginForm.jsx';
-import SignupForm from './components/SignupForm.jsx'; // Ensure the import path is correct
+import SignupForm from './components/SignupForm.jsx';
 
-// Create an http link to your GraphQL server
 const httpLink = createHttpLink({
-  uri: '/graphql', // Ensure this matches the server path
+  uri: '/graphql',
 });
 
-// Set up authentication link
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem('id_token');
   return {
@@ -26,9 +25,19 @@ const authLink = setContext((_, { headers }) => {
   };
 });
 
-// Initialize Apollo Client
+const errorLink = onError(({ graphQLErrors, networkError }) => {
+  if (graphQLErrors) {
+    graphQLErrors.forEach(({ message, locations, path }) => {
+      console.log(`[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`);
+    });
+  }
+  if (networkError) {
+    console.log(`[Network error]: ${networkError}`);
+  }
+});
+
 const client = new ApolloClient({
-  link: authLink.concat(httpLink),
+  link: errorLink.concat(authLink.concat(httpLink)),
   cache: new InMemoryCache(),
 });
 
@@ -51,7 +60,7 @@ const router = createBrowserRouter([
         element: <LoginForm />,
       },
       {
-        path: '/signup', // Ensure you have a signup path
+        path: '/signup',
         element: <SignupForm />,
       },
     ],

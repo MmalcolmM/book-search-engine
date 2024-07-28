@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
 import { useMutation } from '@apollo/client';
 import Auth from '../utils/auth';
-import { ADD_USER } from '../qraphql/queries';  // Ensure this path is correct
+import { ADD_USER } from '../graphql/queries';  // Ensure this path is correct
 
 const SignupForm = () => {
   const [userFormData, setUserFormData] = useState({ username: '', email: '', password: '' });
