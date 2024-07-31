@@ -1,7 +1,6 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
   server: {
@@ -19,5 +18,9 @@ export default defineConfig({
         changeOrigin: true
       }
     }
+  },
+  build: {
+    outDir: '../server/client/dist', // Ensure the build output matches the expected directory
+    emptyOutDir: true, // Optional: Cleans the output directory before building
   }
 });
