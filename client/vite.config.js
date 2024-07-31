@@ -1,3 +1,4 @@
+// client/vite.config.js
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
@@ -20,7 +21,7 @@ export default defineConfig({
     }
   },
   build: {
-    outDir: '../server/client/dist', // Ensure the build output matches the expected directory
-    emptyOutDir: true, // Optional: Cleans the output directory before building
+    outDir: './client/dist', // Ensure the output matches the expected directory
+    emptyOutDir: true,
   }
 });
